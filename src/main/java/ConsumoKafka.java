@@ -27,17 +27,27 @@ public class ConsumoKafka {
 
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
+        /*
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
-
         consumer.subscribe(Arrays.asList("TesteJava"));
-
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
-
-        for (ConsumerRecord<String, String> record: records){
+        for (ConsumerRecord<String, String> record : records) {
             System.out.println(record.value());
         }
-            consumer.close();
+        consumer.close();
         System.out.println("FIM");
+       */
+
+        try(KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);) {
+            consumer.subscribe(Arrays.asList("TesteJava"));
+
+            while(true) {
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+                for (ConsumerRecord<String, String> record : records) {
+                    System.out.println(record.value());
+                }
+            }
+        }
     }
 
 }
